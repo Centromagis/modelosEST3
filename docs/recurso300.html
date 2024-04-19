@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Modelos Estadísticos para la toma de decisiones" />
+
+
+<title> Modelo Lineal General - Logit binomial</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Modelos Estadísticos para la toma de decisiones</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="recurso300.html">Introducción</a>
+</li>
+<li>
+  <a href="recurso310.html">Modelo</a>
+</li>
+<li>
+  <a href="recurso320.html">Estimación</a>
+</li>
+<li>
+  <a href="recurso330.html">Evaluación</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore"><span style="color:#034a94"> <strong>Modelo
+Lineal General - Logit binomial</strong></span></h1>
+<h4 class="author">Modelos Estadísticos para la toma de decisiones</h4>
+
+</div>
+
+
+<p></br></br></p>
+<div id="introducción" class="section level2">
+<h2><span
+style="color:#034A94"><strong>Introducción</strong></span></h2>
+<p><br/></p>
+<p>El <strong>modelo Logit</strong>, también conocido como
+<strong>regresión logística</strong>, es una técnica estadística
+importante utilizada en análisis de datos para modelar la probabilidad
+de un evento binario, como sí/no, éxito/fracaso, o 1/0.</p>
+<ul>
+<li>compra / no compra</li>
+<li>paga / no paga</li>
+<li>deserta / no deserta</li>
+<li>gana / pierde</li>
+</ul>
+<p>Tiene la misma estructura presentada en el modelo de regresión lineal
+múltiple, solo que la variable dependiente es no numérica y corresponde
+a una variable cualitativa con dos valores (bivariada). En este caso el
+modelo se denomina Logit binomial.</p>
+<p><br/></p>
+<p>Este modelo está relacionado con predicción y explicación de las
+decisiones de los consumidores, la clasificación de los clientes de un
+banco y presenta como función de ajuste la <strong>función
+logit</strong> que corresponde a una función en forma de s, en lugar de
+una linea recta como lo hace la regresión lineal simple.</p>
+<p><br/></p>
+<p>El objetivo de la <strong>regresión logística</strong> es la de
+predecir la probabilidad de que una variable binaria (dicotómica) tome
+los valores posibles en la que esta está definida (<span
+class="math inline">\(R_Y= \{0,1 \}\)</span>, mediante la combinación
+lineal de una o varias variables independientes cuantitativas o
+cualitativas. La regresiòn logistica hace parte de los modelos lineales
+generalizados en donde se usa una función de enlace llamada logit.</p>
+<ul>
+<li>probabilidad de compra</li>
+<li>probabilidad de no pago</li>
+<li>probabilidad de desertar</li>
+<li>probabilidad de perder</li>
+</ul>
+<p>En todo los casos se puede tambien estar interesados en esblecer
+cuales de las variables independientes indicen en el incremento de esta
+probabilidad y así poder generar poíticas para incrementarlas o
+disminuirlas segun la conveniencia</p>
+<p></br></p>
+<div class="content-box-blue">
+<p><span class="math display">\[Y = \beta_{0} + \beta_{1}X_{1} +
+\varepsilon\]</span></p>
+</div>
+<p></br></p>
+</div>
+<div id="supuestos-y-requisitos" class="section level2">
+<h2><span style="color:#034a94"><strong>Supuestos y
+requisitos</strong></span></h2>
+<p></br></p>
+<p>El supuesto principal está relacionado con la ausencia de
+multicolinealidad o en caso de existir que sea muy baja, pues de no ser
+así se puede afectar el resultado de las estimaciones, además de
+aumentar artificialmente los errores de los estimadores de los
+coeficientes</p>
+<p>Tambien se supone que la variable dependiente es una variable con
+distribución Bernoulli o binomial con <span
+class="math inline">\(n=1\)</span>. Teniendo el valor de uno cuando se
+obtiene éxito y cero cuando la variable representa fracaso.</p>
+<p></br></br></p>
+<div id="ejemplo" class="section level3">
+<h3><span style="color:#FF7F00"><strong>Ejemplo</strong></span></h3>
+<p></br></p>
+<p>El siguiente problema es tomado del documento realizado por <a
+href="https://rpubs.com/Joaquin_ARhttps://web.whatsapp.com//229736">Joaquín
+Amat Rodrigo</a> publicado en RPlus con el fin de presentar el modelo
+logit simple</p>
+<p></br></p>
+<p>Se pretende ilustrar los componentes del modelo lineal general para
+el caso particular del modelo de logit simple, enmarcado dentro de los
+modelos llamados <strong>modelos de probabilidad</strong> y determinar
+la probabilidad de que un estudiante obtenga matricula de honor a partir
+de la nota obtenida en matemáticas</p>
+<p></br></br></p>
+</div>
+</div>
+<div id="preguntas" class="section level2 content-box-gray">
+<h2><span style="color:#686868"><strong>Preguntas</strong></span></h2>
+<p><br/></p>
+<ul>
+<li><p>Cómo se estiman los modelos de regresión con variables
+cualitativas como variables respuesta?</p></li>
+<li><p>Qué problemas se presentan cuando se desean realizar inferencias?
+Que pruebas de hipotesis se deben realizar?</p></li>
+<li><p>Como se mide la bondad de ajuste del modelo estimado?</p></li>
+<li><p>Como se interpretan los resultados obtenidos?</p></li>
+</ul>
+<p>Preguntas planteadas en Gujarati(2009)</p>
+</div>
+<p>Con el prósito de responder a esta preguntas, empezaremos con las
+caracteristicas de los datos</p>
+<p></br></br></p>
+<div id="datos" class="section level3">
+<h3><span style="color:#034A94"><strong>Datos</strong></span></h3>
+<p></br></p>
+<p>La data: <code>matriculah</code> de <code>paqueteMODELOS</code>,
+contiene los datos de un conjunto de estudiantes que han obtenido
+matricula de honor (<code>matricula = 1</code>) y un grupo de no la han
+conseguido (<code>matricula = 0</code>) y sus respectivas notas
+obtenidas en matemáticas</p>
+<p></br></p>
+<p>En este caso se debe contar con una variable categórica con dos
+niveles representados por dos valores : <span
+class="math inline">\(0\)</span> y <span
+class="math inline">\(1\)</span> (variable matricula), quien obra como
+variable dependiente y por lo menos una variable cuantitativa que tome
+diferentes valores (en este caso la nota de matemáticas).</p>
+<p></br></p>
+<pre class="r"><code>library(paqueteMODELOS)
+data(&quot;matriculah&quot;)
+summary(matriculah)</code></pre>
+<pre><code> honor     matematicas   
+ No:151   Min.   :33.00  
+ Si: 49   1st Qu.:45.00  
+          Median :52.00  
+          Mean   :52.65  
+          3rd Qu.:59.00  
+          Max.   :75.00  </code></pre>
+<p></br></br></p>
+<p>Distribución de matriculados:</p>
+<p>Utilizamos la función <code>table()</code> y <code>ggplot()</code>
+para encontrar la distribución de la variable categórica matricula:</p>
+<p></br></p>
+<p><img src="recurso300_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p></br></br></p>
+<p>Distribución del puntaje en matemáticas por tipo de matricula</p>
+<p></br></p>
+<p>Tambien podemos explorar el comportamiento de la variable
+cuantitativa (matemáticas) para las dos categorías, que en este caso
+corresponde a la distribución de las notas por tipo de matricula :</p>
+<p><img src="recurso300_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p></br></br></p>
+</div>
+<div id="conceptos-básicos" class="section level2">
+<h2><span style="color:#686868"><strong>Conceptos
+básicos</strong></span></h2>
+<p></br></p>
+<div id="variable-dependiente-binaria" class="section level3">
+<h3><span style="color:#034a94"><strong>Variable Dependiente
+Binaria</strong></span>:</h3>
+<p>En el modelo Logit, tienes una variable dependiente que debe ser
+binaria, es decir, solo puede tomar dos valores posibles, como 1 o
+0.</p>
+<p></br></p>
+</div>
+<div id="variables-independientes" class="section level3">
+<h3><span style="color:#034a94"><strong>Variables
+Independientes</strong></span>:</h3>
+<p>Puedes tener una o más variables independientes que se utilizan para
+predecir la variable dependiente binaria. Estas variables pueden ser
+continuas o categóricas. Para el caso de las variables categóricas se
+emplean variables binarias dicótomas.</p>
+<p></br></p>
+</div>
+<div id="función-logit" class="section level3">
+<h3><span style="color:#034a94"><strong>Función
+Logit</strong></span>:</h3>
+<p>La función logit es la función de enlace utilizada en la regresión
+logística. Transforma la probabilidad de éxito en una forma que abarca
+todo el rango real <span class="math inline">\((-\infty, \infty
+)\)</span>. La función logit se define como el logaritmo natural (<span
+class="math inline">\(\ln\)</span>) de la razón de la probabilidad de
+éxito a la probabilidad de fracaso.</p>
+<p></br></p>
+</div>
+<div id="coeficientes-de-regresión" class="section level3">
+<h3><span style="color:#034a94"><strong>Coeficientes de
+Regresión</strong></span>:</h3>
+<p>El modelo Logit estima coeficientes para cada una de las variables
+independientes. Estos coeficientes representan el cambio en el logit
+(<strong>logaritmo de la razón de probabilidades</strong>) de la
+variable dependiente debido a un cambio unitario en la variable
+independiente, manteniendo todas las demás variables constantes.</p>
+<p></br></p>
+</div>
+<div id="estimación-de-parámetros" class="section level3">
+<h3><span style="color:#034a94"><strong>Estimación de
+Parámetros</strong></span>:</h3>
+<p>La regresión logística utiliza técnicas de estimación, como la
+<strong>máxima verosimilitud</strong>, para estimar los valores de los
+coeficientes de regresión.</p>
+<p></br></p>
+</div>
+<div id="odds-ratio" class="section level3">
+<h3><span style="color:#034a94"><strong>Odds Ratio</strong></span>:</h3>
+<p>Los coeficientes de regresión en el modelo Logit se utilizan para
+calcular las <strong>razones de posibilidades</strong> (odds ratio). Un
+<strong>odds ratio</strong> representa cómo un cambio de una unidad en
+la variable independiente afecta las probabilidades de éxito en términos
+de una multiplicación. Un odds ratio mayor a 1 indica un aumento en las
+probabilidades, mientras que un odds ratio menor a 1 indica una
+disminución.</p>
+<p></br></p>
+</div>
+<div id="hipótesis-sobre-los-coeficientes" class="section level3">
+<h3><span style="color:#034a94"><strong>Hipótesis sobre los
+coeficientes</strong></span>:</h3>
+<p>Se pueden realizar pruebas de hipótesis para determinar si los
+coeficientes son estadísticamente significativos en la predicción de la
+variable dependiente. La hipótesis nula es que el coeficiente es igual a
+cero, lo que significa que la variable independiente no tiene efecto en
+las probabilidades.</p>
+<p></br></p>
+</div>
+<div id="evaluación-del-modelo" class="section level3">
+<h3><span style="color:#034a94"><strong>Evaluación del
+Modelo</strong></span>:</h3>
+<p>Se utilizan medidas como: la precisión, la sensibilidad, la
+especificidad, el área bajo la curva ROC (AUC-ROC), entre otras, para
+evaluar el rendimiento del modelo Logit en la clasificación de
+datos.</p>
+<p></br></p>
+</div>
+<div id="interpretación-de-coeficientes" class="section level3">
+<h3><span style="color:#034a94"><strong>Interpretación de
+Coeficientes</strong></span>:</h3>
+<p>La interpretación de los coeficientes en el modelo Logit es
+importante para comprender cómo cada variable independiente afecta las
+probabilidades de éxito o fracaso.</p>
+<p></br></br></br></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

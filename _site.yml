@@ -1,0 +1,16 @@
+name: "Modelo Logit"
+output_dir: "docs"
+navbar:
+  title: "Modelos Estadísticos para la toma de decisiones"
+  left:
+    - text: "Introducción"
+      href: recurso300.html
+    - text: "Modelo"
+      href: recurso310.html
+    - text: "Estimación"
+      href: recurso320.html
+    - text: "Evaluación"
+      href: recurso330.html
+output:
+  html_document:
+    css: style.css

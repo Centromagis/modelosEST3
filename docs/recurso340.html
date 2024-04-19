@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Modelos Estadísticos para la toma de decisiones" />
+
+
+<title> Ejemplo</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Modelos Estadísticos para la toma de decisiones</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="recurso300.html">Introducción</a>
+</li>
+<li>
+  <a href="recurso310.html">Modelo</a>
+</li>
+<li>
+  <a href="recurso320.html">Estimación</a>
+</li>
+<li>
+  <a href="recurso330.html">Evaluación</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore"><span style="color:#034a94">
+<strong>Ejemplo</strong></span></h1>
+<h4 class="author">Modelos Estadísticos para la toma de decisiones</h4>
+
+</div>
+
+
+<p>En un estudio médico fueron registrados datos de pacientes propensos
+a un infarto. Cada paciente fue identificado mediante un número de
+identificación (id) y se recopiló información sobre su
+<strong>edad</strong> , nivel de actividad física
+(<strong>actividad</strong>), antecedentes de angina
+(<strong>angina</strong>) y presión arterial (<strong>presion</strong>).
+El objetivo del estudio fue el de analizar cómo estas variables están
+relacionadas con la ocurrencia de infartos cardíacos
+(<strong>infarto</strong>).</p>
+<p>Se requiere ajustar un <strong>modelo logit</strong> para predecir la
+probabilidad de infarto en función de las características recogidas de
+los pacientes</p>
+<div id="datos" class="section level3">
+<h3>Datos</h3>
+<table class="table table-striped">
+<thead>
+<tr>
+<th style="text-align:right;">
+id
+</th>
+<th style="text-align:right;">
+edad
+</th>
+<th style="text-align:right;">
+actividad
+</th>
+<th style="text-align:right;">
+infarto
+</th>
+<th style="text-align:right;">
+angina
+</th>
+<th style="text-align:right;">
+presion
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+56
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="resumen-descriptivo-de-las-variables" class="section level3">
+<h3>Resumen descriptivo de las variables</h3>
+<p>Inicialmete se revisa las relaciones existentes entre las variables
+contenidas con respecto a la variable dependiente</p>
+<pre class="r"><code>summary(corazon[,2:6])</code></pre>
+<pre><code>      edad         actividad      infarto         angina        presion    
+ Min.   :35.00   Min.   :0.0   Min.   :0.00   Min.   :0.00   Min.   :0.00  
+ 1st Qu.:42.50   1st Qu.:1.0   1st Qu.:0.00   1st Qu.:1.00   1st Qu.:0.00  
+ Median :51.00   Median :2.0   Median :1.00   Median :1.00   Median :1.00  
+ Mean   :50.42   Mean   :1.6   Mean   :0.66   Mean   :0.86   Mean   :0.52  
+ 3rd Qu.:56.00   3rd Qu.:2.0   3rd Qu.:1.00   3rd Qu.:1.00   3rd Qu.:1.00  
+ Max.   :76.00   Max.   :3.0   Max.   :1.00   Max.   :1.00   Max.   :1.00  </code></pre>
+</div>
+<div id="variable-dependiente" class="section level3">
+<h3>Variable dependiente</h3>
+<pre class="r"><code># Instala y carga el paquete ggplot2 si aún no lo has hecho
+# install.packages(&quot;ggplot2&quot;)
+library(ggplot2)
+
+# Ejemplo de datos (sustituye &quot;data&quot; y &quot;frecuencia&quot; con tus propios datos)
+data = table(corazon$infarto) %&gt;%
+               as.data.frame()
+
+# Crea el gráfico de barras con ggplot2
+grafico_barras &lt;- ggplot(data, aes(x = Var1, y = Freq)) +
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;lightblue&quot;) +  # Barras azul claro
+  geom_text(aes(label = Freq), vjust = -0.5, color = &quot;black&quot;, size = 4) +  # Etiquetas de frecuencia encima de las barras
+  labs(x = &quot;Infarto&quot;, y = &quot;Frecuencia&quot;) +  # Etiquetas de ejes
+  theme_minimal()  # Tema minimalista
+
+# Muestra el gráfico
+print(grafico_barras)</code></pre>
+<p><img src="recurso340_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="estimación-del-modelo" class="section level3">
+<h3>Estimación del modelo</h3>
+<pre class="r"><code># Crear variables dicotómicas para la variable &quot;actividad&quot;
+corazon$a_d&lt;- factor(corazon$actividad, levels = 0:3, labels = c(&quot;ninguna&quot;, &quot;minima&quot;, &quot;moderada&quot;, &quot;mas_que_moderada&quot;))
+corazon$a_d &lt;- relevel(corazon$a_d, ref = &quot;ninguna&quot;)
+
+# Ajustar un modelo logit
+modelo1 &lt;- glm(infarto ~ edad + a_d + angina + presion, data = corazon, family = binomial(link = &quot;logit&quot;))
+
+# Ver un resumen del modelo
+summary(modelo1)</code></pre>
+<pre><code>
+Call:
+glm(formula = infarto ~ edad + a_d + angina + presion, family = binomial(link = &quot;logit&quot;), 
+    data = corazon)
+
+Coefficients:
+                    Estimate Std. Error z value Pr(&gt;|z|)  
+(Intercept)          4.15175    2.73523   1.518   0.1290  
+edad                -0.03838    0.03880  -0.989   0.3226  
+a_dminima            1.23798    1.07218   1.155   0.2482  
+a_dmoderada          1.30852    0.95666   1.368   0.1714  
+a_dmas_que_moderada  1.22074    1.12652   1.084   0.2785  
+angina              -2.11143    1.40812  -1.499   0.1338  
+presion             -1.17841    0.70273  -1.677   0.0936 .
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 64.104  on 49  degrees of freedom
+Residual deviance: 55.662  on 43  degrees of freedom
+AIC: 69.662
+
+Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code># Realizar selección de variables paso a paso (stepwise)
+modelo2 &lt;- step(modelo1, direction = &quot;both&quot;, trace = 0)
+
+# Ver un resumen del modelo seleccionado
+summary(modelo2)</code></pre>
+<pre><code>
+Call:
+glm(formula = infarto ~ presion, family = binomial(link = &quot;logit&quot;), 
+    data = corazon)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)   
+(Intercept)   1.3350     0.5026   2.656  0.00791 **
+presion      -1.1809     0.6383  -1.850  0.06430 . 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 64.104  on 49  degrees of freedom
+Residual deviance: 60.453  on 48  degrees of freedom
+AIC: 64.453
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+<div
+id="relacion-de-la-variable-dependiente-con-las-variables-independienes"
+class="section level3">
+<h3>Relacion de la variable dependiente con las variables
+independienes</h3>
+<pre class="r"><code># Ajustar un modelo logit
+modelo3 &lt;- glm(infarto ~ edad, data = corazon, family = binomial(link = &quot;logit&quot;))
+summary(modelo3)</code></pre>
+<pre><code>
+Call:
+glm(formula = infarto ~ edad, family = binomial(link = &quot;logit&quot;), 
+    data = corazon)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)
+(Intercept)  1.43942    1.65623   0.869    0.385
+edad        -0.01533    0.03206  -0.478    0.632
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 64.104  on 49  degrees of freedom
+Residual deviance: 63.875  on 48  degrees of freedom
+AIC: 67.875
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Modelos Estadísticos para la toma de decisiones" />
+
+
+<title> Evaluación del modelo</title>
+
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Modelos Estadísticos para la toma de decisiones</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="recurso300.html">Introducción</a>
+</li>
+<li>
+  <a href="recurso310.html">Modelo</a>
+</li>
+<li>
+  <a href="recurso320.html">Estimación</a>
+</li>
+<li>
+  <a href="recurso330.html">Evaluación</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore"><span style="color:#034a94">
+<strong>Evaluación del modelo</strong></span></h1>
+<h4 class="author">Modelos Estadísticos para la toma de decisiones</h4>
+
+</div>
+
+
+<p></br></p>
+<p>La bondad de ajuste de un modelo de <strong>regresión
+logística</strong> se mide mediante diversas métricas y pruebas
+estadísticas. Algunas de las formas más comunes de medir la bondad de
+ajuste en un modelo logit incluyen:</p>
+<p></br></p>
+<div id="likelihood-ratio-test-prueba-de-razón-de-verosimilitud"
+class="section level3">
+<h3><span style="color:#034a94"><strong>Likelihood Ratio Test (Prueba de
+Razón de Verosimilitud)</strong></span>:</h3>
+<p>Esta prueba compara el modelo ajustado con un modelo nulo (modelo sin
+variables predictoras) para determinar si el modelo ajustado es
+significativamente mejor. Se utiliza el estadístico de prueba
+chi-cuadrado y se compara con una distribución chi-cuadrado con los
+grados de libertad apropiados.</p>
+<p></br></p>
+</div>
+<div id="deviance" class="section level3">
+<h3><span style="color:#034a94"><strong>Deviance</strong></span>:</h3>
+<p>La deviance es una medida de la diferencia entre el modelo ajustado y
+un modelo de referencia ideal. Cuanto menor sea la deviance, mejor será
+el ajuste del modelo. Puedes calcular la deviance utilizando la función
+<code>deviance</code> en R.</p>
+<p></br></p>
+</div>
+<div
+id="aic-criterio-de-información-de-akaike-y-bic-criterio-de-información-bayesiano"
+class="section level3">
+<h3><span style="color:#034a94"><strong>AIC (Criterio de Información de
+Akaike)</strong> y <strong>BIC (Criterio de Información
+Bayesiano)</strong></span>:</h3>
+<p>Estos son criterios de selección de modelos que penalizan la
+complejidad del modelo. Un valor más bajo de AIC o BIC indica un mejor
+ajuste del modelo.</p>
+<p></br></p>
+</div>
+<div id="roc-auc-área-bajo-la-curva-roc" class="section level3">
+<h3><span style="color:#034a94"><strong>ROC-AUC (Área bajo la Curva
+ROC)</strong></span>:</h3>
+<p>Esta métrica mide la capacidad del modelo para discriminar entre las
+clases positiva y negativa. Un valor de ROC-AUC cercano a 1 indica un
+buen ajuste del modelo.</p>
+<p></br></p>
+</div>
+<div id="sensibilidad-y-especificidad" class="section level3">
+<h3><span style="color:#034a94"><strong>Sensibilidad y
+Especificidad</strong></span>:</h3>
+<p>Estas métricas miden la capacidad del modelo para clasificar
+correctamente las observaciones positivas y negativas, respectivamente.
+Una alta sensibilidad y especificidad indican un buen ajuste.</p>
+<p></br></p>
+</div>
+<div id="gráficos-de-curva-roc-y-curva-pr" class="section level3">
+<h3><span style="color:#034a94"><strong>Gráficos de Curva ROC y Curva
+PR</strong></span>:</h3>
+<p>Estos gráficos te permiten visualizar el rendimiento del modelo en
+diferentes umbrales de probabilidad y evaluar su capacidad de
+clasificación.</p>
+<p></br></p>
+</div>
+<div id="matriz-de-confusión" class="section level3">
+<h3><span style="color:#034a94"><strong>Matriz de
+Confusión</strong></span>:</h3>
+<p>La matriz de confusión muestra la clasificación real y la
+clasificación predicha por el modelo. Puedes calcular métricas como la
+precisión, la tasa de falsos positivos y la tasa de falsos negativos a
+partir de la matriz de confusión.</p>
+<p></br></p>
+</div>
+<div id="validación-cruzada" class="section level3">
+<h3><span style="color:#034a94"><strong>Validación
+Cruzada</strong></span>:</h3>
+<p>Dividir los datos en <strong>conjuntos de entrenamiento</strong> y
+<strong>conjunto de prueba</strong> repetidamente (por ejemplo, mediante
+validación cruzada k-fold) y calcular métricas de bondad de ajuste en
+cada iteración. Esto proporciona una evaluación más robusta del
+modelo.</p>
+<p>La elección de la métrica de bondad de ajuste depende de tus
+objetivos específicos y del contexto del problema. En general, es
+recomendable utilizar múltiples métricas y pruebas para evaluar el
+rendimiento del modelo desde diferentes perspectivas.</p>
+<p></br></br></p>
+</div>
+<div id="bondad-de-ajuste-del-modelo" class="section level2">
+<h2><span style="color:#034A94"><strong>Bondad de ajuste del
+modelo</strong></span></h2>
+<p></br></p>
+<p></br></br></p>
+<p>Los colores azules representan la proporción de clasificaciones
+correcta :</p>
+<p></br></p>
+<ul>
+<li><p>Siendo <span class="math inline">\(NO\)</span>, lo clasifica como
+<span class="math inline">\(NO\)</span> : <strong>VN</strong></p></li>
+<li><p>Siendo <span class="math inline">\(SI\)</span> lo clasifica como
+<span class="math inline">\(SI\)</span> : <strong>VP</strong></p></li>
+</ul>
+<p></br></p>
+<p>Los colores naranjas corresponden a las proporciones de
+clasificaciones erradas por el modelo.</p>
+<ul>
+<li><p>Siendo <span class="math inline">\(SI\)</span>, lo clasifica
+incorrectamente como <span class="math inline">\(NO\)</span> : Falsos
+Negativo : <strong>FN</strong></p></li>
+<li><p>Siendo <span class="math inline">\(NO\)</span>, lo clasifica
+incorrectamente como <span class="math inline">\(SI\)</span> : Falso
+Positovo : <strong>FP</strong></p></li>
+</ul>
+<p></br></br></p>
+<p>La proporción de clasificaciones correctas dan una aproximación del
+valor <span class="math inline">\(R^2\)</span></p>
+<p></br></br></p>
+<p><span class="math display">\[
+\dfrac{708+115}{708+127+50+115} = \dfrac{823}{1000} = 0.823
+\]</span> </br></br></p>
+<p>Este valor cuenta como el <span class="math inline">\(R^2\)</span> ,
+es decir que el modelo explica (clasifica de manera adecuada) el 82.3%
+de los casos.</p>
+<p></br></br></p>
+<p>Este valor se puede obtener de la matriz de confusión que se obtiene
+con una data que no se ha empleado en la estimación del modelo</p>
+<p></br></br></p>
+</div>
+<div id="matriz-de-confusión-1" class="section level2">
+<h2><span style="color:#034A94"><strong>Matriz de
+confusión</strong></span></h2>
+<p></br></p>
+<p>Consiste en un método de evaluación del modelo estimado, mediante la
+separación de la data en dos partes. Una primera para estimar el modelo
+(train) que puede corresponder entre el 60% y el 80% de los datos y el
+restante porcentaje para una muestra con la que se evalúa el poder de
+predicción del modelo (Test)</p>
+<p>Lo primero será estimar el modelo con la data.train y posteriormente
+valuar el modelo utilizando la data.test</p>
+<p>Con los resulados obtenidos por la predicción del modelo sobre la
+muestra.test se construye la matriz de confisión que tiene la siguiente
+forma:</p>
+<p></br></br></p>
+<p><img src="img/matriz_confusion.png" width="80%" style="display: block; margin: auto;" /></p>
+<p></br></br></p>
+<p>Se procede a dividir la data en dos partes</p>
+<ul>
+<li>train con el 60% de los registros</li>
+<li>test con el 40% de los registros</li>
+</ul>
+<pre class="r"><code># names(dataMat)
+# nrow(dataMat)
+
+ntrain &lt;- nrow(matriculah)*0.6
+ntest &lt;- nrow(matriculah)*0.4
+# c(ntrain,ntest)
+
+set.seed(123)
+index_train&lt;-sample(1:nrow(matriculah),size = ntrain)
+train&lt;-matriculah[index_train,]  # muestra de entrenamiento
+test&lt;-matriculah[-index_train,]  # muestra de prueba</code></pre>
+<p></br></br></p>
+<p>Se procede a estimar el modelo con la data train y luego emplearlo
+para realizar las predicciones con la data test, para finalmente evaluar
+el resultado utilizando para ello la matriz de confusión.</p>
+<pre class="r"><code>library(tidyverse)
+modelo2 = glm(honor ~ matematicas , family = binomial(link = &quot;logit&quot;), data = train) 
+
+valor_pronosticado &lt;- predict(modelo2,test,type = &quot;response&quot;)
+niveles_pronosticados &lt;- ifelse(valor_pronosticado &gt;0.5, &quot;Si&quot;,&quot;No&quot;) %&gt;%
+                             factor(.)
+
+rendimiento_data&lt;-data.frame(observados=test$honor,
+                             predicciones= niveles_pronosticados)
+
+Positivos &lt;- sum(rendimiento_data$observados==&quot;Si&quot;)
+Negativos &lt;- sum(rendimiento_data$observados==&quot;No&quot;)
+Positivos_pronosticados &lt;- sum(rendimiento_data$predicciones==&quot;Si&quot;)
+Negativos_pronosticados &lt;- sum(rendimiento_data$predicciones==&quot;No&quot;)
+Total &lt;- nrow(rendimiento_data)
+VP&lt;-sum(rendimiento_data$observados==&quot;Si&quot; &amp; rendimiento_data$predicciones==&quot;Si&quot;)
+VN&lt;-sum(rendimiento_data$observados==&quot;No&quot; &amp; rendimiento_data$predicciones==&quot;No&quot;)
+FP&lt;-sum(rendimiento_data$observados==&quot;No&quot; &amp; rendimiento_data$predicciones==&quot;Si&quot;)
+FN&lt;-sum(rendimiento_data$observados==&quot;Si&quot; &amp; rendimiento_data$predicciones==&quot;No&quot;)
+
+matriz_confusion=matrix(c(VP, FP, FN,VN), nrow=2)
+
+rownames(matriz_confusion) = c(&quot; Si &quot;, &quot; No    &quot;)
+colnames(matriz_confusion) = c(&quot;Si&quot;, &quot;No&quot;)
+# matriz_confusion</code></pre>
+<p></br></br></p>
+<p><img src="img/matriz.png" width="60%" style="display: block; margin: auto;" /></p>
+<!-- <pre> -->
+<!--         |                predicción             |   -->
+<!--         |         |   Si       |    No          | -->
+<!-- --------|---------|------------|----------------|    -->
+<!-- Estado  |  Si     |   48  (VP) |     57   (FN)  | -->
+<!-- real    |  No     |   23  (FP) |     272  (VN)  | -->
+<!-- </pre> -->
+<p></br></p>
+<blockquote>
+
+</blockquote>
+<p>A partir de la matriz de confusión se obtienen indicadores</p>
+<p></br></br></p>
+</div>
+<div id="capacidad-de-clasificación-del-modelo" class="section level2">
+<h2><span style="color:#034a94"><strong>Capacidad de clasificación del
+modelo</strong></span></h2>
+<p></br></p>
+<p>En una de las características más importantes del modelo, pues
+permite valorar a través de la matriz de confusión las clasificaciones
+correctas por medio de las predicciones del modelo.</p>
+<p>Existen adicionamente otros indicadores que pueden ser utilizados
+como es el estadistico c asociado a la curva ROC (Trvrivrt Oprtsyong
+Charasteristic) . Esta curva compara diferentes puntos de corte de la
+probabilidad que permite establecer la tasa de clasificaciones correcta
+de verdaderos positivos y de falsos positivos:</p>
+<p></br></br></p>
+<div id="exactitudaccuracy" class="section level3">
+<h3><span style="color:#034A94">
+<strong>Exactitud</strong>(Accuracy)</span></h3>
+<ul>
+<li>Mide la proporción de predicciones correctas en relación con el
+total de predicciones realizadas por el modelo.</li>
+<li>Es útil cuando las clases están balanceadas.</li>
+<li>Presenta limitaciones cuando las clases están desequilibradas. Un
+modelo que predice siempre la clase mayoritaria puede tener una alta
+exactitud.</li>
+</ul>
+<div class="content-box-blue">
+<p><span class="math display">\[
+\text{Exactitud} = \dfrac{\text{aciertos en
+clasificación}}{\text{Total}} = \dfrac{VP + VN}{\text{Total}} =
+\dfrac{48+272}{400} = 0.80
+\]</span></p>
+</div>
+<p></br></br></p>
+</div>
+<div id="tasa-de-error-error-rate" class="section level3">
+<h3><span style="color:#034A94"> <strong>Tasa de error</strong> (Error
+Rate)</span></h3>
+<!-- ```{r, echo=FALSE, out.width="80%", fig.align = "center"} -->
+<!-- knitr::include_graphics("img/matriz_confusion.png") -->
+<!-- ``` -->
+<ul>
+<li>Porcentaje de casos incorrectamente clasificados. Es el complemento
+de la exactitud, es decir, 1 - exactitud.</li>
+<li>Es útil como medida general del error del modelo.</li>
+<li>Al igual que la exactitud, puede ser falsa en problemas con clases
+desequilibradas.</li>
+</ul>
+<div class="content-box-blue">
+<p><span class="math display">\[
+\text{Tasa de Error} = \dfrac{\text{no aciertos en
+clasificación}}{\text{Total}} = \dfrac{FP + FN}{\text{Total}} =
+\dfrac{23+57}{400} = 0.20
+\]</span></p>
+</div>
+<p></br></br></p>
+</div>
+<div id="sensibilidad-recall-o-true-positive-rate"
+class="section level3">
+<h3><span style="color:#034A94"> <strong>Sensibilidad</strong> (Recall o
+True Positive Rate)</span></h3>
+<ul>
+<li>Mide la capacidad del modelo para identificar correctamente los
+casos positivos (VP) en relación con el total de casos positivos reales
+(VP + FN).</li>
+<li>Importante cuando es crítico <strong>no perder casos
+positivos</strong>.</li>
+<li>A mayor sensibilidad menos falsos negativos, pero pueden aumentar
+los falsos positivos.</li>
+</ul>
+<div class="content-box-blue">
+<p><span class="math display">\[
+\text{Sensibilidad} = \dfrac{VP}{\text{Total positivos}} =
+\dfrac{48}{105} = 0.457
+\]</span></p>
+</div>
+<p></br></br></p>
+</div>
+<div id="especificidadspecificity" class="section level3">
+<h3><span style="color:#034A94">
+<strong>Especificidad</strong>(Specificity)</span></h3>
+<p>Mide la capacidad del modelo para identificar correctamente los casos
+negativos (VN) en relación con el total de casos negativos reales (VN +
+FP). * Importante cuando es crítico <strong>no cometer falsos
+positivos</strong>. Mayor especificidad significa menos falsos
+positivos, pero puede aumentar los falsos negativos.</p>
+<div class="content-box-blue">
+<p><span class="math display">\[
+\text{Especificidad} = \dfrac{\text{VN}}{\text{Total negativos}} =
+\dfrac{272}{295} = 0.922
+\]</span></p>
+</div>
+<p></br></br></p>
+</div>
+<div id="presición-precision" class="section level3">
+<h3><span style="color:#034A94"> <strong>Presición</strong>
+(Precision)</span></h3>
+<ul>
+<li>Mide la proporción de predicciones positivas correctas (VP) en
+relación con el total de predicciones positivas (VP + FP).</li>
+<li>Importante cuando se busca <strong>minimizar los falsos
+positivos</strong>.</li>
+<li>A mayor precisión, menos falsos positivos, pero generar aumento de
+los falsos negativos.</li>
+</ul>
+<div class="content-box-blue">
+<p><span class="math display">\[
+\text{Precision} = \dfrac{\text{VP}}{\text{Total clasificados
+positivos}} = \dfrac{48}{71} = 0.676
+\]</span></p>
+</div>
+<p></br></br></p>
+</div>
+<div id="valor-de-predicción-negativo-negative-predictive-value"
+class="section level3">
+<h3><span style="color:#034A94"> <strong>Valor de predicción
+negativo</strong> (Negative Predictive Value)</span></h3>
+<ul>
+<li>Mide la proporción de casos negativos reales (VN) en relación con el
+total de predicciones negativas correctas (VN + FN).</li>
+<li>Importante cuando se busca <strong>minimizar los falsos
+negativos</strong>.</li>
+<li>A mayor valor predictivo negativo, menos falsos negativos, pero se
+pueden aumentar los falsos positivos.</li>
+</ul>
+<div class="content-box-blue">
+<p><span class="math display">\[
+\text{Valor de prediccion negativo} = \dfrac{\text{VN}}{\text{Total
+clasificados negativos}} = \dfrac{272}{329} = 0.827
+\]</span></p>
+</div>
+<p></br></br></p>
+</div>
+<div id="resumen" class="section level3">
+<h3><span style="color:#686868"> <strong>Resumen</strong></span></h3>
+<p></br></p>
+<!-- ```{r, eval=FALSE} -->
+<!-- # library(tidyverse) -->
+<!-- # Exactitud <- (VP+VN)/Total -->
+<!-- # Tasa_de_Error <- (FP+FN)/Total -->
+<!-- # Sensibilidad <- VP/Positivos -->
+<!-- # Especificidad <- VN/Negativos -->
+<!-- # Precision <- VP/Positivos_pronosticados -->
+<!-- # Valor_prediccion_negativo <- VN / Negativos_pronosticados -->
+<!-- #  -->
+<!-- # indicadores <- t(data.frame(Exactitud,Tasa_de_Error,Sensibilidad,Especificidad,Precision,Valor_prediccion_negativo)) -->
+<!-- # indicadores %>%  -->
+<!-- #   round(.,3) -->
+<!-- ``` -->
+<pre class="r"><code># Instala y carga las librerías knitr y kableExtra si aún no están instaladas
+# install.packages(&quot;knitr&quot;)
+# install.packages(&quot;kableExtra&quot;)
+library(knitr)
+library(kableExtra)
+
+# Crear un marco de datos con los valores
+df &lt;- data.frame(
+  Indicador = c(&quot;Exactitud&quot;, &quot;Tasa de Error&quot;, &quot;Sensibilidad&quot;, &quot;Especificidad&quot;, &quot;Precisión&quot;, &quot;Valor predicción negativo&quot;),
+  Valor = c(0.800, 0.200, 0.457, 0.922, 0.676, 0.827),
+  Preferencia = c(&quot;Alto&quot;, &quot;Bajo&quot;, &quot;Alto&quot;, &quot;Alto&quot;, &quot;Alto&quot;, &quot;Alto&quot;))
+
+# Crear la tabla formateada con kable y kableExtra
+tabla_formateada &lt;- df %&gt;%
+  kable(format = &quot;html&quot;, align = &quot;lrc&quot;) %&gt;%
+  kable_styling(bootstrap_options = &quot;striped&quot;, full_width = FALSE) %&gt;%
+  add_header_above(c(&quot; &quot; = 1, &quot; &quot; = 1, &quot; &quot; = 1)) %&gt;%
+  column_spec(1, width = &quot;300px&quot;) %&gt;%  # Ampliar el ancho de la primera columna
+  column_spec(2, width = &quot;150px&quot;) %&gt;%  # Ampliar el ancho de la segunda columna
+  column_spec(3, width = &quot;150px&quot;)    # Ampliar el ancho de la tercera columna
+
+# Imprimir la tabla
+tabla_formateada</code></pre>
+<table class="table table-striped" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+Indicador
+</th>
+<th style="text-align:right;">
+Valor
+</th>
+<th style="text-align:center;">
+Preferencia
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 300px; ">
+Exactitud
+</td>
+<td style="text-align:right;width: 150px; ">
+0.800
+</td>
+<td style="text-align:center;width: 150px; ">
+Alto
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 300px; ">
+Tasa de Error
+</td>
+<td style="text-align:right;width: 150px; ">
+0.200
+</td>
+<td style="text-align:center;width: 150px; ">
+Bajo
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 300px; ">
+Sensibilidad
+</td>
+<td style="text-align:right;width: 150px; ">
+0.457
+</td>
+<td style="text-align:center;width: 150px; ">
+Alto
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 300px; ">
+Especificidad
+</td>
+<td style="text-align:right;width: 150px; ">
+0.922
+</td>
+<td style="text-align:center;width: 150px; ">
+Alto
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 300px; ">
+Precisión
+</td>
+<td style="text-align:right;width: 150px; ">
+0.676
+</td>
+<td style="text-align:center;width: 150px; ">
+Alto
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 300px; ">
+Valor predicción negativo
+</td>
+<td style="text-align:right;width: 150px; ">
+0.827
+</td>
+<td style="text-align:center;width: 150px; ">
+Alto
+</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>El valor <strong>c</strong> de corte de la probabilidad, incide
+sobre los indicadores</li>
+</ul>
+<p></br></p>
+<ul>
+<li>El balanceo de los porcentajes de la variable dependiente es
+importante y afecta a los indicadores</li>
+</ul>
+<p></br></br></p>
+</div>
+</div>
+<div id="curva-roc-y-valor-auc" class="section level1">
+<h1><span style="color:#034A94"><strong>Curva ROC y valor
+AUC</strong></span></h1>
+<p></br></p>
+<p>La curva ROC es una representación gráfica de los valores de la tasa
+de falsos positivos (TFP o FPR) o <strong>1-especificidad</strong> y en
+el eje de las ordenadas la tasa de verdaderos positivos (TVP o TPR) o
+también llamada <strong>sensibilidad</strong>, para diferentes valores
+del umbral de clasificación.</p>
+<p>Esta curva permite evaluar la capacidad predictiva de un modelo de
+clasificación binaria (en este caso del modelo logit binomial) mediante
+el calculo del área bajo la curva denominado <strong>AUC</strong></p>
+<p></br></p>
+<img src="img/ROC.png" width="80%" style="display: block; margin: auto;" />
+<center>
+Curvas ROC - Receiver Operating Characteristic
+</center>
+<p></br></br></p>
+<img src="img/AUC.png" width="80%" style="display: block; margin: auto;" />
+<center>
+Rango de valores de AUC - Area Under the Curve
+</center>
+<p></br></br></p>
+<p>La <strong>clasificación perfecta</strong> ocurre cuando la curva
+pasa por el punto (0,1):</p>
+<ul>
+<li>Tasa de positivos verdaderos = 1</li>
+<li>Tasa de falsos positivos = 0</li>
+</ul>
+<p>Indicando que todos los valores positivos fueron bien clasificados
+como se indica en la figura (a) y corresponde a un valor AUC = 1.0</p>
+<p></br></p>
+<p>La <strong>clasificacion excelente</strong> se presenta cuando la
+curva ROC pasa cerca del punto (0,1), indicando que el modelo tienen una
+alta capacidad para clasificar correctamente los valores positivos del
+modelo y los verdaderos negativos. En este caso el valor del área bajo
+la curva ROC, AUC &gt; 0.5, representada por la figura (b)</p>
+<p></br></p>
+<p>La <strong>clasificación aceptable</strong> ocurre cuando el modelo
+presenta una capacidad limitada para clasificar y es equibalente a una
+asignación aleatoria. En este caso la curva ROC corresponde a una linea
+diagonal y el valor del area bajo la curva AUC = 0.5</p>
+<p></br></br></p>
+<p>En el caso del modelo</p>
+<p><span class="math display">\[
+\widehat{\text{honor}} = \widehat{\beta_{0}} +
+\widehat{\beta_{1}}  \hspace{.3cm} \text{matematicas}
+\]</span> </br></p>
+<p>Presenta la curva ROC y su área bajo la curva AUC</p>
+<pre class="r"><code>library(pROC)
+curva_ROC &lt;- roc(test$honor, valor_pronosticado)
+auc&lt;- round(auc(curva_ROC, levels =c(0,1), direction = &quot;&lt;&quot;),4) # 0.9177
+
+ggroc(curva_ROC, colour = &quot;#FF7F00&quot;, size=1)+
+ggtitle(paste0(&quot;Curva ROC &quot;, &quot;(AUC = &quot;, auc, &quot;)&quot;))+
+xlab(&quot;Especificidad&quot;)+
+ylab(&quot;Sensibilidad&quot;)  </code></pre>
+<p><img src="recurso330_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>El área comprendida entre la curva ROC y la diagonal del cuadrado
+(AUC = 0.8292), indica un buen ajuste del modelo de predicción.</p>
+<p></br></br></p>
+<div class="content-box-gray">
+<div id="nota" class="section level3">
+<h3><span style="color:#686868"><strong>Nota:</strong></span></h3>
+<p></br></br></p>
+<p>Existen casos donde es conveniente tener valores altos de estos
+indicadores</p>
+</div>
+<div id="alta-sensibilidad-recall" class="section level3">
+<h3><strong>Alta Sensibilidad (Recall) :</strong></h3>
+<p><strong>Detección de enfermedades graves:</strong> Por ejemplo, en el
+diagnóstico de cáncer, es crucial identificar correctamente a todas las
+personas que realmente tienen la enfermedad (casos positivos). Una alta
+sensibilidad asegura que se detecten la mayor cantidad posible de casos
+positivos, aunque esto pueda resultar en un mayor número de falsos
+positivos.</p>
+<p><strong>Detección de fraudes:</strong> En la detección de fraudes en
+transacciones financieras, es fundamental identificar la mayor cantidad
+posible de transacciones fraudulentas. Una alta sensibilidad ayuda a
+capturar la mayoría de los casos de fraude, aunque pueda resultar en
+algunos casos legítimos identificados como fraudulentos.</p>
+<p></br></br></p>
+</div>
+<div id="alta-especificidad-specificity" class="section level3">
+<h3><strong>Alta Especificidad (Specificity) :</strong></h3>
+<p><strong>Pruebas de seguridad en aeropuertos:</strong> En los
+controles de seguridad en aeropuertos, es importante minimizar los
+falsos positivos para no causar molestias innecesarias a los pasajeros.
+Una alta especificidad asegura que la mayoría de los pasajeros legítimos
+no sean identificados erróneamente como riesgosos.</p>
+<p><strong>Diagnóstico de enfermedades contagiosas:</strong> En el caso
+de enfermedades altamente contagiosas, es crucial identificar
+correctamente a las personas sanas (casos negativos) para evitar la
+propagación de la enfermedad. Una alta especificidad ayuda a minimizar
+los falsos negativos, asegurando que las personas enfermas sean
+identificadas correctamente.</p>
+</div>
+</div>
+<p></br></br></p>
+<div id="código" class="section level3">
+<h3><strong>CÓDIGO</strong></h3>
+<pre class="r"><code># Instalar y cargar el paquete caret si no está instalado
+if (!requireNamespace(&quot;caret&quot;, quietly = TRUE)) {
+  install.packages(&quot;caret&quot;)
+}
+library(caret)
+
+# Dividir la base de datos en conjuntos de entrenamiento y prueba
+set.seed(123)  # Para reproducibilidad
+training_indices &lt;- createDataPartition(dataMat$gana, p = 0.7, list = FALSE)
+datos_entrenamiento &lt;- dataMat[training_indices, ]
+datos_prueba &lt;- dataMat[-training_indices, ]
+
+# Entrenar el modelo
+modelo_logit &lt;- glm(gana ~ nota, family = binomial(link = &quot;logit&quot;), data = datos_entrenamiento)
+
+# Obtener las predicciones del modelo en los datos de prueba
+predicciones &lt;- predict(modelo_logit, newdata = datos_prueba, type = &quot;response&quot;)
+clases_predichas &lt;- ifelse(predicciones &gt; 0.5, 1, 0)
+
+datos_prueba$gana1&lt;-as.numeric(datos_prueba$gana==&quot;Si&quot;)
+# Crear la matriz de confusión
+matriz_confusion &lt;- confusionMatrix(table(clases_predichas, datos_prueba$gana1))
+
+# Mostrar la matriz de confusión y métricas de evaluación
+print(matriz_confusion)</code></pre>
+<pre><code>Confusion Matrix and Statistics
+
+                
+clases_predichas   0   1
+               0 211  18
+               1  19  51
+                                          
+               Accuracy : 0.8763          
+                 95% CI : (0.8335, 0.9114)
+    No Information Rate : 0.7692          
+    P-Value [Acc &gt; NIR] : 2.003e-06       
+                                          
+                  Kappa : 0.6532          
+                                          
+ Mcnemar&#39;s Test P-Value : 1               
+                                          
+            Sensitivity : 0.9174          
+            Specificity : 0.7391          
+         Pos Pred Value : 0.9214          
+         Neg Pred Value : 0.7286          
+             Prevalence : 0.7692          
+         Detection Rate : 0.7057          
+   Detection Prevalence : 0.7659          
+      Balanced Accuracy : 0.8283          
+                                          
+       &#39;Positive&#39; Class : 0               
+                                          </code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
