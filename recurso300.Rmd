@@ -91,7 +91,7 @@ Tambien se supone que la variable dependiente es una variable con distribución 
 
 </br>
 
-El siguiente problema es tomado del documento realizado por [Joaquín Amat Rodrigo](https://rpubs.com/Joaquin_ARhttps://web.whatsapp.com//229736) publicado en RPlus con el fin de presentar el modelo logit simple
+El siguiente problema es tomado del documento realizado por [Joaquín Amat Rodrigo](https://rpubs.com/Joaquin_AR/229736) publicado en RPlus con el fin de presentar el modelo logit simple
 
 </br>
 
