@@ -23,7 +23,7 @@ library(tidyverse)
 
 # install.packages("learnr")          # solo una vez
 # install.packages("devtools")     # solo una vez
-devtools::install_github("dgonxalex80/paqueteMODELOS", force = TRUE) 
+#devtools::install_github("dgonxalex80/paqueteMODELOS", force = TRUE) 
 library(paqueteMODELOS)
 data("eleccion")
 ```
