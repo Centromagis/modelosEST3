@@ -9,12 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Modelos Estadísticos para la toma de decisiones" />
 
 
-<title> Ejemplo</title>
+<title>recurso340.knit</title>
 
-<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -31,7 +30,6 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
@@ -219,9 +217,6 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
-<style type="text/css">
-.code-folding-btn { margin-bottom: 4px; }
-</style>
 
 
 
@@ -270,23 +265,35 @@ $(document).ready(function () {
 
 <div id="header">
 
-<div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
-<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
-<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
-</ul>
-</div>
 
 
-
-<h1 class="title toc-ignore"><span style="color:#034a94">
-<strong>Ejemplo</strong></span></h1>
-<h4 class="author">Modelos Estadísticos para la toma de decisiones</h4>
 
 </div>
 
 
+<table>
+<tbody>
+<tr class="odd">
+<td>title: <span style="color:#034a94">
+<strong>Ejemplo</strong></span></td>
+</tr>
+<tr class="even">
+<td>author: “Modelos Estadísticos para la toma de decisiones”</td>
+</tr>
+<tr class="odd">
+<td>output:</td>
+</tr>
+<tr class="even">
+<td>html_document:</td>
+</tr>
+<tr class="odd">
+<td>code_folding: hide</td>
+</tr>
+<tr class="even">
+<td>css: style.css</td>
+</tr>
+</tbody>
+</table>
 <p>En un estudio médico fueron registrados datos de pacientes propensos
 a un infarto. Cada paciente fue identificado mediante un número de
 identificación (id) y se recopiló información sobre su
@@ -469,14 +476,14 @@ library(ggplot2)
 
 # Ejemplo de datos (sustituye &quot;data&quot; y &quot;frecuencia&quot; con tus propios datos)
 data = table(corazon$infarto) %&gt;%
-               as.data.frame()
+as.data.frame()
 
 # Crea el gráfico de barras con ggplot2
 grafico_barras &lt;- ggplot(data, aes(x = Var1, y = Freq)) +
-  geom_bar(stat = &quot;identity&quot;, fill = &quot;lightblue&quot;) +  # Barras azul claro
-  geom_text(aes(label = Freq), vjust = -0.5, color = &quot;black&quot;, size = 4) +  # Etiquetas de frecuencia encima de las barras
-  labs(x = &quot;Infarto&quot;, y = &quot;Frecuencia&quot;) +  # Etiquetas de ejes
-  theme_minimal()  # Tema minimalista
+geom_bar(stat = &quot;identity&quot;, fill = &quot;lightblue&quot;) +  # Barras azul claro
+geom_text(aes(label = Freq), vjust = -0.5, color = &quot;black&quot;, size = 4) +  # Etiquetas de frecuencia encima de las barras
+labs(x = &quot;Infarto&quot;, y = &quot;Frecuencia&quot;) +  # Etiquetas de ejes
+theme_minimal()  # Tema minimalista
 
 # Muestra el gráfico
 print(grafico_barras)</code></pre>
@@ -543,10 +550,10 @@ AIC: 64.453
 Number of Fisher Scoring iterations: 4</code></pre>
 </div>
 <div
-id="relacion-de-la-variable-dependiente-con-las-variables-independienes"
+id="relación-de-la-variable-dependiente-con-las-variables-independientes"
 class="section level3">
-<h3>Relacion de la variable dependiente con las variables
-independienes</h3>
+<h3>Relación de la variable dependiente con las variables
+independientes</h3>
 <pre class="r"><code># Ajustar un modelo logit
 modelo3 &lt;- glm(infarto ~ edad, data = corazon, family = binomial(link = &quot;logit&quot;))
 summary(modelo3)</code></pre>
@@ -602,11 +609,6 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
-});
-</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

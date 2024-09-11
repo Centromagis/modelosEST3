@@ -14,7 +14,7 @@
 
 <title> Estimación del modelo</title>
 
-<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -31,7 +31,6 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
@@ -219,9 +218,6 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
-<style type="text/css">
-.code-folding-btn { margin-bottom: 4px; }
-</style>
 
 
 
@@ -270,14 +266,6 @@ $(document).ready(function () {
 
 <div id="header">
 
-<div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
-<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
-<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
-</ul>
-</div>
-
 
 
 <h1 class="title toc-ignore"><span style="color:#034a94">
@@ -298,17 +286,36 @@ matriculah = sample(matriculah, 1000, replace = TRUE)  # se realiza un proceso b
 matriculah %&gt;% 
 glm(honor ~ matematicas , family = binomial(link = &quot;logit&quot;), data = .) -&gt; modelo1
 summary(modelo1) </code></pre>
+<pre><code>
+Call:
+glm(formula = honor ~ matematicas, family = binomial(link = &quot;logit&quot;), 
+    data = .)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -9.04461    0.63678  -14.20   &lt;2e-16 ***
+matematicas  0.14415    0.01113   12.95   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1113.55  on 999  degrees of freedom
+Residual deviance:  877.63  on 998  degrees of freedom
+AIC: 881.63
+
+Number of Fisher Scoring iterations: 5</code></pre>
 <pre>
 Call:
 glm(formula = honor ~ matematicas, family = binomial(link = "logit"), 
-    data = .)
+data = .)
 
 Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
+Min       1Q   Median       3Q      Max  
 -1.9618  -0.7065  -0.4140  -0.1652   2.5208  
 
 Coefficients:
-            Estimate Std. Error z value Pr(>|z|)    
+Estimate Std. Error z value Pr(>|z|)    
 (Intercept) -9.04461    0.63678  -14.20   <2e-16 ***
 matematicas  0.14415    0.01113   12.95   <2e-16 ***
 ---
@@ -316,7 +323,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 (Dispersion parameter for binomial family taken to be 1)
 
-    Null deviance: 1113.55  on 999  degrees of freedom
+Null deviance: 1113.55  on 999  degrees of freedom
 Residual deviance:  877.63  on 998  degrees of freedom
 AIC: 881.63
 
@@ -342,7 +349,7 @@ entonces <span class="math inline">\(1-P_{i} = 0.20\)</span>, luego
 <p><span class="math display">\[\Bigg( \dfrac{0.80}{0.20} \Bigg) = 4.0
 \]</span></p>
 <p>Indicando una razón entre las probabilidades de 4 a 1. Es cuatro
-veces mas problable que ocurra el evento sobre que no ocurra.</p>
+veces mas probable que ocurra el evento sobre que no ocurra.</p>
 <p>En el modelo estimado esta relación para un valor específico de <span
 class="math inline">\(X\)</span> de la siguiente forma:</p>
 <p></br></p>
@@ -378,14 +385,14 @@ class="math inline">\(H_1 : \beta_{i} \neq 0\)</span></p>
 \]</span></p>
 <pre>
 Coefficients:
-            Estimate Std. Error z value Pr(>|z|)    
+Estimate Std. Error z value Pr(>|z|)    
 (Intercept) -9.04461    0.63678  -14.20   <2e-16 ***
 matematicas  0.14415    0.01113   12.95   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre>
 <p></br></p>
-<p>En el ejemplo ambos coeficientes son estadisticamente significativos,
+<p>En el ejemplo ambos coeficientes son estadísticamente significativos,
 con valor p de cero</p>
 <p></br></br></p>
 </div>
@@ -440,9 +447,9 @@ mediante :</p>
 <p></br></p>
 <pre class="r"><code>library(MASS)
 confint(object = modelo1, level = 0.95 )</code></pre>
-<pre><code>                 2.5 %     97.5 %
-(Intercept) -31.566042 -23.785796
-nota          6.841565   9.123502</code></pre>
+<pre><code>                  2.5 %     97.5 %
+(Intercept) -10.3339408 -7.8348886
+matematicas   0.1229407  0.1666339</code></pre>
 <p></br></br></p>
 </div>
 </div>
@@ -462,7 +469,7 @@ la suma desviaciones del modelo nulo con la suma de las desviaciones de
 los residuales que se presentan en el resumen del modelo</p>
 <p></br></p>
 <pre>
-    Null deviance: 1113.55  on 999  degrees of freedom
+Null deviance: 1113.55  on 999  degrees of freedom
 Residual deviance:  877.63  on 998  degrees of freedom
 AIC: 881.63
 </pre>
@@ -471,12 +478,12 @@ X^2 = \text{ Null deviance} - \text{ Residual deviance} = 1113.55 -
 877.63 = 235.92
 \]</span></p>
 <pre class="r"><code>with(modelo1, null.deviance - deviance )</code></pre>
-<pre><code>[1] 663.7366</code></pre>
+<pre><code>[1] 235.9168</code></pre>
 <p></br></p>
 <p>Que tiene una distribución <span class="math inline">\(\chi^2 _{v:
 gl_{null} -gl_{residual}}\)</span></p>
 <pre class="r"><code>with(modelo1, pchisq(null.deviance - deviance , df.null-df.residual, lower.tail = FALSE))</code></pre>
-<pre><code>[1] 2.29994e-146</code></pre>
+<pre><code>[1] 3.055301e-53</code></pre>
 <p></br></p>
 <p>Lo cual indica que se rechaza <span
 class="math inline">\(H_o\)</span>, en favor de <span
@@ -486,7 +493,7 @@ class="math inline">\(H_a\)</span>, el modelo es significativo</p>
 <h3><span style="color:#686868"><strong>Nota:</strong></span></h3>
 <p></br></p>
 <p>Es importante examinar la significancia de los coeficientes estimados
-obtenidos mediante el metodo de máxima verosimilitud. En este caso en
+obtenidos mediante el método de máxima verosimilitud. En este caso en
 lugar de calcular el valor p para cada coeficiente, se utiliza el
 estadístico <strong>Z</strong> de la prueba <strong>chi-cuadrado de
 Wald</strong></p>
@@ -494,7 +501,7 @@ Wald</strong></p>
 <li><p>En este tipo de modelos la bondad de ajuste pasa a un segundo
 plano y cobra importancia el signo de los coeficientes y su
 significancia estadística.</p></li>
-<li><p>Tambien es condición que las observaciones deben ser
+<li><p>También es condición que las observaciones deben ser
 independientes unas de otras</p></li>
 <li><p>Y la relación entre <span
 class="math inline">\(\ln(Odds)\)</span> y las variables independientes
@@ -546,11 +553,6 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
-});
-</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

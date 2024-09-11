@@ -2,9 +2,9 @@
 title: <span style="color:#034a94"> **Modelo**</span>
 author: "Modelos Estadísticos para la toma de decisiones"
 output:
-  html_document:
-    code_folding: hide
-    css: style.css
+html_document:
+code_folding: hide
+css: style.css
 ---
 
 ```{r setup, include=FALSE}
@@ -23,7 +23,7 @@ library(tidyverse)
 
 # install.packages("learnr")          # solo una vez
 # install.packages("devtools")     # solo una vez
-# devtools::install_github("dgonxalex80/paqueteMOD", force = TRUE) #descarga paquete nivelatorioEST
+# devtools::install_github("dgonxalex80/paqueteMODELOS", force = TRUE) #descarga paquete nivelatorioEST
 library(paqueteMODELOS)
 data("matriculah")
 ```
@@ -62,7 +62,7 @@ library(tidyverse)
 matriculah$honor=as.numeric(matriculah$honor)
 
 matriculah %>% 
-   lm(honor ~ matematicas ,  data = .) -> modelo0
+lm(honor ~ matematicas ,  data = .) -> modelo0
 summary(modelo0) 
 ```
 
@@ -79,10 +79,10 @@ matriculah1=matriculah
 matriculah1$honor = as.numeric(matriculah1$honor)
 
 g3=ggplot(data = matriculah1, mapping = aes(x=matematicas, y=honor)) + 
-           geom_point() + 
-           geom_smooth(method = "lm", se=FALSE) +         
-           labs(y = "matricula de honor", x = "puntaje matemáticas") +
-           ggtitle("  ")
+geom_point() + 
+geom_smooth(method = "lm", se=FALSE) +         
+labs(y = "matricula de honor", x = "puntaje matemáticas") +
+ggtitle("  ")
 
 g3
 ```
@@ -141,14 +141,14 @@ library(ggplot2)
 library(ggplot2)
 
 fx <- function(x) {
-  1 / (1 + exp(-x))
+	1 / (1 + exp(-x))
 }
 
 ggplot(data.frame(x = c(-8, 8)), aes(x)) + 
-  stat_function(fun = fx, size = 1, col = "#FF7F00") +
-  labs(title = "  ",
-       x = "Variable Independiente",
-       y = expression(p[i]))
+stat_function(fun = fx, size = 1, col = "#FF7F00") +
+labs(title = "  ",
+x = "Variable Independiente",
+y = expression(p[i]))
 
 
 ```

@@ -1,10 +1,10 @@
----
+------
 title: <span style="color:#034a94"> **Ejemplo**</span>
 author: "Modelos Estadísticos para la toma de decisiones"
 output:
-  html_document:
-    code_folding: hide
-    css: style.css
+html_document:
+code_folding: hide
+css: style.css
 ---
 
 ```{r setup, include=FALSE}
@@ -34,7 +34,7 @@ Se requiere ajustar un **modelo logit** para predecir la probabilidad de infarto
 ### Datos
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-library(paqueteMETODOS)
+library(paqueteMODELOS)
 data("corazon")
 # Crear la tabla bonita
 tabla_bonita <- kable(head(corazon), format = "html", table.attr = 'class="table table-striped"')
@@ -64,14 +64,14 @@ library(ggplot2)
 
 # Ejemplo de datos (sustituye "data" y "frecuencia" con tus propios datos)
 data = table(corazon$infarto) %>%
-               as.data.frame()
+as.data.frame()
 
 # Crea el gráfico de barras con ggplot2
 grafico_barras <- ggplot(data, aes(x = Var1, y = Freq)) +
-  geom_bar(stat = "identity", fill = "lightblue") +  # Barras azul claro
-  geom_text(aes(label = Freq), vjust = -0.5, color = "black", size = 4) +  # Etiquetas de frecuencia encima de las barras
-  labs(x = "Infarto", y = "Frecuencia") +  # Etiquetas de ejes
-  theme_minimal()  # Tema minimalista
+geom_bar(stat = "identity", fill = "lightblue") +  # Barras azul claro
+geom_text(aes(label = Freq), vjust = -0.5, color = "black", size = 4) +  # Etiquetas de frecuencia encima de las barras
+labs(x = "Infarto", y = "Frecuencia") +  # Etiquetas de ejes
+theme_minimal()  # Tema minimalista
 
 # Muestra el gráfico
 print(grafico_barras)
@@ -107,7 +107,7 @@ summary(modelo2)
 
 ```
 
-### Relacion de la variable dependiente con las variables independienes
+### Relación de la variable dependiente con las variables independientes
 
 
 
@@ -120,6 +120,3 @@ modelo3 <- glm(infarto ~ edad, data = corazon, family = binomial(link = "logit")
 summary(modelo3)
 
 ```
-
-
-

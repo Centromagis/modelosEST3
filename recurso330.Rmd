@@ -1,10 +1,10 @@
----
+
 title: <span style="color:#034a94"> **Evaluación del modelo**</span>
 author: "Modelos Estadísticos para la toma de decisiones"
 output:
-  html_document:
-    code_folding: hide
-    css: style.css
+html_document:
+code_folding: hide
+css: style.css
 ---
 
 ```{r setup, include=FALSE}
@@ -96,7 +96,7 @@ La elección de la métrica de bondad de ajuste depende de tus objetivos especí
 
 
 
- </br></br>
+</br></br>
 
 ## <span style="color:#034A94">**Bondad de ajuste del modelo**</span>
 
@@ -149,7 +149,7 @@ Consiste en un método de evaluación del modelo estimado, mediante la separaci�
 
 Lo primero será estimar el modelo con la data.train y posteriormente valuar el modelo utilizando la data.test
 
-Con los resulados obtenidos por la predicción del modelo sobre la muestra.test se construye la matriz de confisión que tiene la siguiente forma:
+Con los resulados obtenidos por la predicción del modelo sobre la muestra.test se construye la matriz de confusión que tiene la siguiente forma:
 
 </br></br>
 
@@ -190,10 +190,10 @@ modelo2 = glm(honor ~ matematicas , family = binomial(link = "logit"), data = tr
 
 valor_pronosticado <- predict(modelo2,test,type = "response")
 niveles_pronosticados <- ifelse(valor_pronosticado >0.5, "Si","No") %>%
-                             factor(.)
+factor(.)
 
 rendimiento_data<-data.frame(observados=test$honor,
-                             predicciones= niveles_pronosticados)
+predicciones= niveles_pronosticados)
 
 Positivos <- sum(rendimiento_data$observados=="Si")
 Negativos <- sum(rendimiento_data$observados=="No")
@@ -245,7 +245,7 @@ A partir de la matriz de confusión se obtienen indicadores
 
 En una de las características más importantes del modelo, pues permite valorar a través de la matriz de confusión las clasificaciones correctas por medio de las predicciones del modelo. 
 
-Existen adicionamente otros indicadores que pueden ser utilizados como es el estadistico c asociado a la curva ROC (Trvrivrt Oprtsyong Charasteristic) . Esta curva compara diferentes puntos de corte de la probabilidad que permite establecer la tasa de clasificaciones correcta de verdaderos positivos y de falsos positivos:
+Existen adicionalmente otros indicadores que pueden ser utilizados como es el estadístico $c$ asociado a la curva ROC (Trvrivrt Oprtsyong Charasteristic) . Esta curva compara diferentes puntos de corte de la probabilidad que permite establecer la tasa de clasificaciones correcta de verdaderos positivos y de falsos positivos:
 
 </br></br>
 
@@ -371,18 +371,18 @@ library(kableExtra)
 
 # Crear un marco de datos con los valores
 df <- data.frame(
-  Indicador = c("Exactitud", "Tasa de Error", "Sensibilidad", "Especificidad", "Precisión", "Valor predicción negativo"),
-  Valor = c(0.800, 0.200, 0.457, 0.922, 0.676, 0.827),
-  Preferencia = c("Alto", "Bajo", "Alto", "Alto", "Alto", "Alto"))
+Indicador = c("Exactitud", "Tasa de Error", "Sensibilidad", "Especificidad", "Precisión", "Valor predicción negativo"),
+Valor = c(0.800, 0.200, 0.457, 0.922, 0.676, 0.827),
+Preferencia = c("Alto", "Bajo", "Alto", "Alto", "Alto", "Alto"))
 
 # Crear la tabla formateada con kable y kableExtra
 tabla_formateada <- df %>%
-  kable(format = "html", align = "lrc") %>%
-  kable_styling(bootstrap_options = "striped", full_width = FALSE) %>%
-  add_header_above(c(" " = 1, " " = 1, " " = 1)) %>%
-  column_spec(1, width = "300px") %>%  # Ampliar el ancho de la primera columna
-  column_spec(2, width = "150px") %>%  # Ampliar el ancho de la segunda columna
-  column_spec(3, width = "150px")    # Ampliar el ancho de la tercera columna
+kable(format = "html", align = "lrc") %>%
+kable_styling(bootstrap_options = "striped", full_width = FALSE) %>%
+add_header_above(c(" " = 1, " " = 1, " " = 1)) %>%
+column_spec(1, width = "300px") %>%  # Ampliar el ancho de la primera columna
+column_spec(2, width = "150px") %>%  # Ampliar el ancho de la segunda columna
+column_spec(3, width = "150px")    # Ampliar el ancho de la tercera columna
 
 # Imprimir la tabla
 tabla_formateada
@@ -442,11 +442,11 @@ Indicando que todos los valores positivos fueron bien clasificados como se indic
 
 </br>
 
-La **clasificacion excelente** se presenta cuando la curva ROC pasa cerca del punto (0,1), indicando que el modelo tienen una alta capacidad para clasificar  correctamente los valores positivos del modelo y los verdaderos negativos. En este caso el valor del área bajo la curva ROC, AUC > 0.5, representada por la figura (b)
+La **clasificación excelente** se presenta cuando la curva ROC pasa cerca del punto (0,1), indicando que el modelo tienen una alta capacidad para clasificar  correctamente los valores positivos del modelo y los verdaderos negativos. En este caso el valor del área bajo la curva ROC, AUC > 0.5, representada por la figura (b)
 
 </br>
 
-La **clasificación aceptable** ocurre cuando el modelo presenta una capacidad limitada para clasificar y es equibalente a una asignación aleatoria. En este caso la curva ROC corresponde a una linea diagonal y el valor del area bajo la curva AUC = 0.5
+La **clasificación aceptable** ocurre cuando el modelo presenta una capacidad limitada para clasificar y es equivalente a una asignación aleatoria. En este caso la curva ROC corresponde a una linea diagonal y el valor del área bajo la curva AUC = 0.5
 
 
 </br></br>
@@ -511,7 +511,7 @@ Existen casos donde es conveniente tener valores altos de estos indicadores
 ```{r}
 # Instalar y cargar el paquete caret si no está instalado
 if (!requireNamespace("caret", quietly = TRUE)) {
-  install.packages("caret")
+	install.packages("caret")
 }
 library(caret)
 
@@ -537,6 +537,4 @@ print(matriz_confusion)
 
 
 ```
-
-
 
